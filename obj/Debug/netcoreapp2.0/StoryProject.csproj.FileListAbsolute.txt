@@ -1,0 +1,11 @@
+C:\Users\Austin\source\repos\StoryProject\StoryProject\bin\Debug\netcoreapp2.0\StoryProject.deps.json
+C:\Users\Austin\source\repos\StoryProject\StoryProject\bin\Debug\netcoreapp2.0\StoryProject.runtimeconfig.json
+C:\Users\Austin\source\repos\StoryProject\StoryProject\bin\Debug\netcoreapp2.0\StoryProject.runtimeconfig.dev.json
+C:\Users\Austin\source\repos\StoryProject\StoryProject\bin\Debug\netcoreapp2.0\StoryProject.dll
+C:\Users\Austin\source\repos\StoryProject\StoryProject\bin\Debug\netcoreapp2.0\StoryProject.pdb
+C:\Users\Austin\source\repos\StoryProject\StoryProject\obj\Debug\netcoreapp2.0\StoryProject.csprojResolveAssemblyReference.cache
+C:\Users\Austin\source\repos\StoryProject\StoryProject\obj\Debug\netcoreapp2.0\StoryProject.csproj.CoreCompileInputs.cache
+C:\Users\Austin\source\repos\StoryProject\StoryProject\obj\Debug\netcoreapp2.0\StoryProject.AssemblyInfoInputs.cache
+C:\Users\Austin\source\repos\StoryProject\StoryProject\obj\Debug\netcoreapp2.0\StoryProject.AssemblyInfo.cs
+C:\Users\Austin\source\repos\StoryProject\StoryProject\obj\Debug\netcoreapp2.0\StoryProject.dll
+C:\Users\Austin\source\repos\StoryProject\StoryProject\obj\Debug\netcoreapp2.0\StoryProject.pdb
