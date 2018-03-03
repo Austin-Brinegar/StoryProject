@@ -6,19 +6,14 @@ namespace StoryProject
 {
     public class Armor
     {
-        private string name;
-        private float damageResistance;
+        public string Name { get; set; }
+        public double DamageResistance { get; set; }
 
-        public Armor(string name, float damageResistance)
+        public Armor(string Name, double DamageResistance)
         {
-            this.name = name;
-            this.damageResistance = damageResistance;
+            this.Name = Name;
+            this.DamageResistance = DamageResistance;
         }
 
-        public float DamageResistance
-        {
-            get { return damageResistance;  }
-            set { damageResistance = value; }
-        }
     }
 }

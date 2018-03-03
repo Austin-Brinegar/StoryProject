@@ -47,8 +47,7 @@ namespace StoryProject
                 switch(choice)
                 {
                     case "a":
-                        float damage = pc.Attack(opponent);
-                        PlayerAttackText(damage);
+                        PlayerAttackText(pc.Attack(opponent));
                         if (CheckDeath(opponent)) battleOn = false;
                         turnOver = true;
                         break;
@@ -60,16 +59,18 @@ namespace StoryProject
                         Console.WriteLine($"You have {pc.Health} health left");
                         break;
                     case "d":
-                        Console.WriteLine("You fled the battle");
-                        battleOn = false;
-                        turnOver = true;
+                        //Console.WriteLine("You fled the battle");
+                        //battleOn = false;
+                        //turnOver = true;
+                        Console.WriteLine("Where are you going to run to, scardy cat?");
+                        turnOver = false;
                         break;
                     default:
                         Console.WriteLine("Not a valid input, your clumsy mistakes deals 1 damage to you.");
                         pc.Health -= 1;
                         if (CheckDeath(pc))
                         {
-                            ColorText("Congratulations, You killed yourself", ConsoleColor.DarkRed);
+                            Utility.ColorText("Congratulations, You killed yourself", ConsoleColor.DarkRed);
                             battleOn = false;
                         }
                         break;
@@ -80,39 +81,41 @@ namespace StoryProject
         //logic behind opponent's turn
         void OpponentTurn()
         {
-            float damage = opponent.Attack(pc);
-            if(opponent.Health <= 10 && opponent.Items.Count > 0)
+            Random rng = new Random();
+            int rand = rng.Next(10);
+            //if (opponent.Health <= 10 && opponent.Items.Count > 0)
+            if (rand < opponent.Items.Count)
             {
-                opponent.Items[0].Effect(opponent);
+                opponent.Items[0].Effect(opponent, pc);
             }
             else
             {
-                OpponentAttackText(damage);
+                OpponentAttackText(opponent.Attack(pc));
             }
             if (pc.Health <= 0) battleOn = false;
         }
 
         //Text if player attacks
-        void PlayerAttackText(float damage)
+        void PlayerAttackText(double damage)
         {
             Console.Clear();
-            Console.WriteLine($"You hit {opponent.Name} wirh your {pc.EquippedWeapon.Name} for {damage} " +
+            Console.WriteLine($"You hit {opponent.Name} with your {pc.EquippedWeapon.Name} for {damage} " +
                 $"damage... he has {opponent.Health} health left"); 
             if (CheckDeath(opponent))
             {
-                ColorText("You killed him!", ConsoleColor.Cyan);
+                Utility.ColorText("You killed him!", ConsoleColor.Cyan);
             }
         }
         
         //Text when an opponent attacks
-        void OpponentAttackText(float damage)
+        void OpponentAttackText(double damage)
         {
             String s = ($"{opponent.Name} hits you with {opponent.EquippedWeapon.Name} for  { damage} " +
                 $"damage... you have {pc.Health} health left.");
-            ColorText(s, ConsoleColor.Red);
+            Utility.ColorText(s, ConsoleColor.Red);
             if (CheckDeath(pc))
             {
-                ColorText("You Died", ConsoleColor.DarkRed);
+                Utility.ColorText("You Died", ConsoleColor.DarkRed);
             }
             
         }
@@ -125,14 +128,6 @@ namespace StoryProject
                 return true;
             }
             return false;
-        }
-
-        //Change the output color of a string
-        public static void ColorText(String s, ConsoleColor c)
-        {
-            Console.ForegroundColor = c;
-            Console.WriteLine(s);
-            Console.ForegroundColor = ConsoleColor.White;
         }
 
         //Prompts the user to select an item and handles selection
@@ -191,7 +186,7 @@ namespace StoryProject
             //check if item exists then use it
             if (pc.Items.Count > index && pc.Items[index] != null) 
             {
-                pc.Items[index].Effect(pc);
+                pc.Items[index].Effect(pc, opponent);
                 return true;
             }
             else

@@ -13,7 +13,7 @@ namespace StoryProject
 
     class Character
     {
-
+        //Full Constructor
         public Character(String Name, float Health, float Strength, Weapon EquippedWeapon, Armor EquippedArmor, 
             Alignment PlayerAlignment, List<Item> Items)
         {
@@ -25,13 +25,22 @@ namespace StoryProject
             this.PlayerAlignment = PlayerAlignment;
             this.Items = new List<Item>();
             this.Items.AddRange(Items);
+            IsPC = false;
+        }
+
+        //Smallest Constructor
+        public Character(String Name, float Health, float Strength)
+        {
+            this.Name = Name;
+            this.Health = Health;
+            this.Strength = Strength;
         }
 
         public String Name { get; set; }
 
-        public float Health { get; set; }
+        public double Health { get; set; }
         
-        public float Strength { get; set; }
+        public double Strength { get; set; }
 
         public Weapon EquippedWeapon { get; set; }
 
@@ -41,14 +50,16 @@ namespace StoryProject
 
         public List<Item> Items { get; set; }
 
+        public bool IsPC { get; set; }
+
         //Calculates damage to be done to opponent and returns the damage dealt after modifiers
-        public float Attack(Character opponent)
+        public double Attack(Character opponent)
         {
             //Calculate power (The total damage to be dealt to opponent)
             Random rng = new Random();
-            float modifier = rng.Next(11);
+            double modifier = rng.Next(11);
             modifier /= 10;
-            float power = Strength * modifier + EquippedWeapon.Damage;
+            double power = Strength * modifier + EquippedWeapon.Damage;
 
             //Deal out the damage
             if (power - EquippedArmor.DamageResistance <= 0)
@@ -63,7 +74,7 @@ namespace StoryProject
             }
         }
 
-        public void addItem(Item i)
+        public void AddItem(Item i)
         {
             if(Items.Count <= 5)
             {

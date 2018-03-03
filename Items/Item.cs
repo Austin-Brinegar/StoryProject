@@ -9,6 +9,6 @@ namespace StoryProject
         public String Name { get; set; }
         public String Description { get; set; }
 
-        public abstract void Effect(Character c);
+        public abstract void Effect(Character user, Character opponent);
     }
 }

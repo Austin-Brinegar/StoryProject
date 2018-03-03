@@ -9,26 +9,27 @@ namespace StoryProject
         //constructor
         public HealthPotion(int HealingAmount)
         {
-            Name = $"Health Potion +{HealingAmount}";
+            Name = $"Health Potion [+{HealingAmount} health]";
             Description = "The Vial has a faint red glow... it smells like strawberries.";
             this.HealingAmount = HealingAmount;
         }
 
         //specifies what the item does.
-        public override void Effect(Character c)
+        public override void Effect(Character user, Character opponent)
         {
-            c.Health += HealingAmount;
-            if (c.Name.Equals("You"))
+            user.Health += HealingAmount;
+            if (user.IsPC)
             {
                 Console.Clear();
-                Battle.ColorText($"{c.Name} used your {Name} and have been healed {HealingAmount}. Your health is now {c.Health}"
+                Utility.ColorText($"You used your {Name} and have been healed {HealingAmount}. Your health is now {user.Health}"
                     , ConsoleColor.Green);
             }
-            else{
-                Battle.ColorText($"{c.Name} used his {Name} to heal {HealingAmount}. his health is now {c.Health}"
+            else
+            {
+                Utility.ColorText($"{user.Name} used his {Name} to heal {HealingAmount}. his health is now {user.Health}"
                     , ConsoleColor.Yellow);
             }
-            c.Items.Remove(this);
+            user.Items.Remove(this);
         }
     }
 }

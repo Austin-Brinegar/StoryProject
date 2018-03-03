@@ -6,25 +6,13 @@ namespace StoryProject
 {
     public class Weapon
     {
-        private String name;
-        private float damage;
+        public String Name { get; set; }
+        public double Damage { get; set; }
 
-        public Weapon(String name, float damage)
+        public Weapon(String Name, float Damage)
         {
-            this.name = name;
-            this.damage = damage;
-        }
-
-        public float Damage
-        {
-            get { return damage; }
-            set { damage = value; }
-        }
-
-        public String Name
-        {
-            get { return name; }
-            set { name = value; }
+            this.Name = Name;
+            this.Damage = Damage;
         }
     }
 }
