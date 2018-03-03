@@ -11,11 +11,11 @@ namespace StoryProject
         Evil
     }
 
-    public class Character
+    class Character
     {
 
         public Character(String Name, float Health, float Strength, Weapon EquippedWeapon, Armor EquippedArmor, 
-            Alignment PlayerAlignment)
+            Alignment PlayerAlignment, List<Item> Items)
         {
             this.Name = Name;
             this.Health = Health;
@@ -23,6 +23,8 @@ namespace StoryProject
             this.EquippedWeapon = EquippedWeapon;
             this.EquippedArmor = EquippedArmor;
             this.PlayerAlignment = PlayerAlignment;
+            this.Items = new List<Item>();
+            this.Items.AddRange(Items);
         }
 
         public String Name { get; set; }
@@ -36,6 +38,8 @@ namespace StoryProject
         public Armor EquippedArmor { get; set; }
 
         public Alignment PlayerAlignment { get; set; }
+
+        public List<Item> Items { get; set; }
 
         //Calculates damage to be done to opponent and returns the damage dealt after modifiers
         public float Attack(Character opponent)
@@ -56,6 +60,18 @@ namespace StoryProject
             {
                 opponent.Health -= (power - EquippedArmor.DamageResistance);
                 return (power - EquippedArmor.DamageResistance);
+            }
+        }
+
+        public void addItem(Item i)
+        {
+            if(Items.Count <= 5)
+            {
+                Items.Add(i);
+            }
+            else
+            {
+                Console.WriteLine("Inventory Full");
             }
         }
     }

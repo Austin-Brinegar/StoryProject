@@ -33,13 +33,15 @@ namespace StoryProject
         //logic behind player's turn
         void PlayerTurn()
         {
-            Console.WriteLine("A: Attack");
-            Console.WriteLine("B: Run");
-            Console.WriteLine("C: Check Stats");
             String choice;
             bool turnOver = false;
             do
             {
+                Console.WriteLine("A: Attack");
+                Console.WriteLine("B: Use Item");
+                Console.WriteLine("C: Check Stats");
+                Console.WriteLine("D: Run");
+
                 choice = Console.ReadLine(); //read player selection
                 choice = choice.ToLower();
                 switch(choice)
@@ -51,19 +53,23 @@ namespace StoryProject
                         turnOver = true;
                         break;
                     case "b":
+                        turnOver = PlayerSelectItem();
+                        if (turnOver) break;
+                        else continue;
+                    case "c":
+                        Console.WriteLine($"You have {pc.Health} health left");
+                        break;
+                    case "d":
                         Console.WriteLine("You fled the battle");
                         battleOn = false;
                         turnOver = true;
-                        break;
-                    case "c":
-                        Console.WriteLine($"You have {pc.Health} health left");
                         break;
                     default:
                         Console.WriteLine("Not a valid input, your clumsy mistakes deals 1 damage to you.");
                         pc.Health -= 1;
                         if (CheckDeath(pc))
                         {
-                            colorText("Congratulations, You killed yourself", ConsoleColor.DarkRed);
+                            ColorText("Congratulations, You killed yourself", ConsoleColor.DarkRed);
                             battleOn = false;
                         }
                         break;
@@ -75,7 +81,14 @@ namespace StoryProject
         void OpponentTurn()
         {
             float damage = opponent.Attack(pc);
-            OpponentAttackText(damage);
+            if(opponent.Health <= 10 && opponent.Items.Count > 0)
+            {
+                opponent.Items[0].Effect(opponent);
+            }
+            else
+            {
+                OpponentAttackText(damage);
+            }
             if (pc.Health <= 0) battleOn = false;
         }
 
@@ -87,7 +100,7 @@ namespace StoryProject
                 $"damage... he has {opponent.Health} health left"); 
             if (CheckDeath(opponent))
             {
-                colorText("You killed him!", ConsoleColor.Cyan);
+                ColorText("You killed him!", ConsoleColor.Cyan);
             }
         }
         
@@ -96,10 +109,10 @@ namespace StoryProject
         {
             String s = ($"{opponent.Name} hits you with {opponent.EquippedWeapon.Name} for  { damage} " +
                 $"damage... you have {pc.Health} health left.");
-            colorText(s, ConsoleColor.Red);
+            ColorText(s, ConsoleColor.Red);
             if (CheckDeath(pc))
             {
-                colorText("You Died", ConsoleColor.DarkRed);
+                ColorText("You Died", ConsoleColor.DarkRed);
             }
             
         }
@@ -115,11 +128,78 @@ namespace StoryProject
         }
 
         //Change the output color of a string
-        void colorText(String s, ConsoleColor c)
+        public static void ColorText(String s, ConsoleColor c)
         {
             Console.ForegroundColor = c;
             Console.WriteLine(s);
             Console.ForegroundColor = ConsoleColor.White;
-        } 
+        }
+
+        //Prompts the user to select an item and handles selection
+        bool PlayerSelectItem()
+        {
+            //Write list of items to screen. Fill with empty if they dont exist
+            Console.WriteLine("Please select which item to use:");
+            int i;
+            for (i = 0; i < 5; i++)
+            {
+                if (i < pc.Items.Count)
+                {
+                    Console.WriteLine($"{i + 1}: {pc.Items[i].Name}");
+                }
+                else Console.WriteLine($"{i + 1}: empty");
+            }
+            Console.WriteLine($"{i + 1}: Back"); //Last entry (6 is max) should always be back
+            String choice;
+            bool endLoop = false;
+            do //loop over player choice until they get it right
+            {
+                choice = Console.ReadLine(); //read player selection
+                choice = choice.ToLower();
+                switch (choice)
+                {
+                    //for each case, return out of the method with true (indicating that the item was used and the turn should end) 
+                    //or break the switch to allow for another attempt.
+                    case "1":
+                        if (PlayerUseItem(0)) return true;
+                        else break;
+                    case "2":
+                        if (PlayerUseItem(1)) return true;
+                        else break;
+                    case "3":
+                        if (PlayerUseItem(2)) return true;
+                        else break;
+                    case "4":
+                        if (PlayerUseItem(3)) return true;
+                        else break;
+                    case "5":
+                        if (PlayerUseItem(4)) return true;
+                        else break;
+                    case "6":
+                        return false;
+                    default:
+                        Console.WriteLine("Seriously? Read the list...");
+                        break;
+                }
+            } while (!endLoop);
+            return false;//Will never be reached
+        }
+
+        //Checks to see if the desired item exists, then uses it if it does. Returns true if item exists.
+        bool PlayerUseItem(int index)
+        {
+            //check if item exists then use it
+            if (pc.Items.Count > index && pc.Items[index] != null) 
+            {
+                pc.Items[index].Effect(pc);
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("Theres Nothing there...");
+                return false;
+            }
+
+        }
     }
 }

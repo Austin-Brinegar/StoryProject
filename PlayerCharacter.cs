@@ -9,7 +9,7 @@ namespace StoryProject
         private static PlayerCharacter instance;
         private int karma;
 
-        private PlayerCharacter() :base("Traveler",100, 10, new Weapon("Fists", 0), new Armor("Clothes", 0), Alignment.Neutral)
+        private PlayerCharacter() :base("You",100, 10, new Weapon("Fists", 0), new Armor("Clothes", 0), Alignment.Neutral, new List<Item>())
         {
             karma = 0;
         }

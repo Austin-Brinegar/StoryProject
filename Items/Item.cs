@@ -6,11 +6,9 @@ namespace StoryProject
 {
     abstract class Item
     {
-        String Name { get; set; }
-        String Description { get; set; }
+        public String Name { get; set; }
+        public String Description { get; set; }
 
-
-
-        public abstract void effect();
+        public abstract void Effect(Character c);
     }
 }
