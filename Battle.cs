@@ -8,8 +8,9 @@ namespace StoryProject
     {
         private PlayerCharacter pc;
         private Character opponent;
-        bool battleOn;
+        bool battleOn; //true if fight is still going on
 
+        //constructor
         public Battle(Character opponent)
         {
             pc = PlayerCharacter.Instance;
@@ -17,6 +18,7 @@ namespace StoryProject
             battleOn = true;
         }
 
+        //logic behind the entire fight
         public void Fight()
         {
             do
@@ -28,74 +30,81 @@ namespace StoryProject
             while (battleOn);
         }
 
+        //logic behind player's turn
         void PlayerTurn()
         {
             Console.WriteLine("A: Attack");
             Console.WriteLine("B: Run");
+            Console.WriteLine("C: Check Stats");
             String choice;
+            bool turnOver = false;
             do
             {
                 choice = Console.ReadLine(); //read player selection
                 choice = choice.ToLower();
-                if (choice.Equals("a"))
+                switch(choice)
                 {
-                    float damage = pc.Attack();
-                    opponent.TakeDamage(damage); //Damage opponent
-                    PlayerAttackText(damage);
-                    if (CheckDeath(opponent)) battleOn = false;
-                }
-                else if (choice.Equals("b"))
-                {
-                    Console.WriteLine("You fled the battle");
-                    battleOn = false;
-                }
-                else
-                {
-                    Console.WriteLine("Not a valid input, your clumsy mistakes deals 1 damage to you.");
-                    pc.Health -= 1;
-                    if (CheckDeath(pc))
-                    {
-                        Console.WriteLine("Congratulations, You killed yourself");
+                    case "a":
+                        float damage = pc.Attack(opponent);
+                        PlayerAttackText(damage);
+                        if (CheckDeath(opponent)) battleOn = false;
+                        turnOver = true;
+                        break;
+                    case "b":
+                        Console.WriteLine("You fled the battle");
                         battleOn = false;
-                    }
+                        turnOver = true;
+                        break;
+                    case "c":
+                        Console.WriteLine($"You have {pc.Health} health left");
+                        break;
+                    default:
+                        Console.WriteLine("Not a valid input, your clumsy mistakes deals 1 damage to you.");
+                        pc.Health -= 1;
+                        if (CheckDeath(pc))
+                        {
+                            colorText("Congratulations, You killed yourself", ConsoleColor.DarkRed);
+                            battleOn = false;
+                        }
+                        break;
                 }
-            } while (!choice.Equals("a") && !choice.Equals("b"));
+            } while (!turnOver);
         }
 
+        //logic behind opponent's turn
         void OpponentTurn()
         {
-            float damage = opponent.Attack();
-            pc.TakeDamage(damage);
+            float damage = opponent.Attack(pc);
             OpponentAttackText(damage);
             if (pc.Health <= 0) battleOn = false;
         }
 
+        //Text if player attacks
         void PlayerAttackText(float damage)
         {
-            Console.WriteLine("You hit " + opponent.Name + " with your " + pc.EquippedWeapon.Name +
-                " for " + damage + " Damage... He has " + opponent.Health + " health left.");
+            Console.Clear();
+            Console.WriteLine($"You hit {opponent.Name} wirh your {pc.EquippedWeapon.Name} for {damage} " +
+                $"damage... he has {opponent.Health} health left"); 
             if (CheckDeath(opponent))
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("You killed him!");
-                Console.ForegroundColor = ConsoleColor.White;
+                colorText("You killed him!", ConsoleColor.Cyan);
             }
         }
         
+        //Text when an opponent attacks
         void OpponentAttackText(float damage)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(opponent.Name + " hits you with " + opponent.EquippedWeapon.Name + " for " +
-                damage + " Damage... you have " + pc.Health + " health left.");
+            String s = ($"{opponent.Name} hits you with {opponent.EquippedWeapon.Name} for  { damage} " +
+                $"damage... you have {pc.Health} health left.");
+            colorText(s, ConsoleColor.Red);
             if (CheckDeath(pc))
             {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("You Died");
-                Console.ForegroundColor = ConsoleColor.White;
+                colorText("You Died", ConsoleColor.DarkRed);
             }
-            Console.ForegroundColor = ConsoleColor.White;
+            
         }
 
+        //Check to see if a character is dead
         bool CheckDeath(Character c)
         {
             if(c.Health <= 0)
@@ -104,5 +113,13 @@ namespace StoryProject
             }
             return false;
         }
+
+        //Change the output color of a string
+        void colorText(String s, ConsoleColor c)
+        {
+            Console.ForegroundColor = c;
+            Console.WriteLine(s);
+            Console.ForegroundColor = ConsoleColor.White;
+        } 
     }
 }

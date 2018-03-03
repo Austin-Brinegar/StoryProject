@@ -4,87 +4,58 @@ using System.Text;
 
 namespace StoryProject
 {
-    enum Alignment
+    public enum Alignment
     {
         Good,
         Neutral,
         Evil
     }
 
-    class Character
+    public class Character
     {
-        protected String name;
-        protected float health; //how much damage can be taken in a fight
-        protected float strength; //How much damage is done per hit (before modifiers)
-        protected Weapon equippedWeapon;
-        protected Armor equippedArmor;
-        protected Alignment playerAlignment;
 
-        public Character(String name, float health, float strength, Weapon equippedWeapon, Armor equippedArmor, 
-            Alignment playerAlignment)
+        public Character(String Name, float Health, float Strength, Weapon EquippedWeapon, Armor EquippedArmor, 
+            Alignment PlayerAlignment)
         {
-            this.name = name;
-            this.health = health;
-            this.strength = strength;
-            this.equippedWeapon = equippedWeapon;
-            this.equippedArmor = equippedArmor;
-            this.playerAlignment = playerAlignment;
+            this.Name = Name;
+            this.Health = Health;
+            this.Strength = Strength;
+            this.EquippedWeapon = EquippedWeapon;
+            this.EquippedArmor = EquippedArmor;
+            this.PlayerAlignment = PlayerAlignment;
         }
 
-        public String Name {
-            get { return name; }
-            set { name = value;  }
-        }
+        public String Name { get; set; }
 
-        public float Health
-        {
-            get { return health; }
-            set { health = value; }
-        }
+        public float Health { get; set; }
         
-        public float Strength
-        {
-            get { return strength; }
-            set { strength = value; }
-        }
+        public float Strength { get; set; }
 
-        public Weapon EquippedWeapon
-        {
-            get { return equippedWeapon; }
-            set { equippedWeapon = value; }
-        }
+        public Weapon EquippedWeapon { get; set; }
 
-        public Armor EquippedArmor
-        {
-            get { return equippedArmor; }
-            set { equippedArmor = value; }
-        }
+        public Armor EquippedArmor { get; set; }
 
-        public Alignment PlayerAlignment
-        {
-            get { return playerAlignment; }
-            set { playerAlignment = value; }
-        }
+        public Alignment PlayerAlignment { get; set; }
 
-        //returns total damage to be dealt
-        public float Attack()
+        //Calculates damage to be done to opponent and returns the damage dealt after modifiers
+        public float Attack(Character opponent)
         {
+            //Calculate power (The total damage to be dealt to opponent)
             Random rng = new Random();
             float modifier = rng.Next(11);
             modifier /= 10;
-            return strength*modifier + equippedWeapon.Damage;
-        }
-         
-        //modifies health value by damage done 
-        public void TakeDamage(float damage)
-        {
-            if(damage - equippedArmor.DamageResistance <= 0)
+            float power = Strength * modifier + EquippedWeapon.Damage;
+
+            //Deal out the damage
+            if (power - EquippedArmor.DamageResistance <= 0)
             {
-                health -= 1;
+                opponent.Health -= 1;    
+                return 1;
             }
             else
             {
-                health -= (damage - equippedArmor.DamageResistance);
+                opponent.Health -= (power - EquippedArmor.DamageResistance);
+                return (power - EquippedArmor.DamageResistance);
             }
         }
     }

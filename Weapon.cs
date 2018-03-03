@@ -4,10 +4,10 @@ using System.Text;
 
 namespace StoryProject
 {
-    class Weapon
+    public class Weapon
     {
-        String name;
-        float damage;
+        private String name;
+        private float damage;
 
         public Weapon(String name, float damage)
         {
